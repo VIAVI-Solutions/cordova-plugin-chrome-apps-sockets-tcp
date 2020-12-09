@@ -263,9 +263,13 @@ NSTimeInterval const PIPE_TO_FILE_PROGRESS_INTERVAL = 0.1;
 
 - (void)resumeReadIfNotReading
 {
+    [_socket readDataWithTimeout:-1 buffer:nil bufferOffset:0 maxLength:[_bufferSize unsignedIntegerValue] tag:++_readTag];
+    
+    /* Tag comparison seems to be falsy when working with chunked data, so taking out the conditional guard to allow iOS to work with chunked data.
     if (_readTag == _receivedTag && _plugin->_pendingReceive == 0 && [_socket isConnected] && ![_paused boolValue]) {
         [_socket readDataWithTimeout:-1 buffer:nil bufferOffset:0 maxLength:[_bufferSize unsignedIntegerValue] tag:++_readTag];
     }
+     */
 }
 
 - (void)setPaused:(NSNumber*)paused
